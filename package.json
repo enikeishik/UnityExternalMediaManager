@@ -1,0 +1,7 @@
+{
+  "name": "com.enikeishik.unityexternalmediamanager",
+  "displayName": "Unity External Media Manager",
+  "version": "1.0.0",
+  "source": "https://github.com/enikeishik/UnityExternalMediaManager",
+  "description": "Manager of external media files (images, audio, video) for Unity 3D."
+}
