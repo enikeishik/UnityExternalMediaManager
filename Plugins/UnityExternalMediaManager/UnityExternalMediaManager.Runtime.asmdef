@@ -1,6 +1,6 @@
 {
     "name": "UnityExternalMediaManager.Runtime",
     "references": [
-        "SimpleFileBrowser"
+        "GUID:67c5b913f413c8d419f87bd0d8aabd81"
     ]
 }
