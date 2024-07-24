@@ -5,5 +5,13 @@
   "documentationUrl": "https://github.com/enikeishik/UnityExternalMediaManager",
   "changelogUrl": "https://github.com/enikeishik/UnityExternalMediaManager",
   "licensesUrl": "https://github.com/enikeishik/UnityExternalMediaManager",
-  "description": "Manager of external media files (images, audio, video) for Unity 3D."
+  "description": "Manager of external media files (images, audio, video) for Unity 3D.",
+  "dependencies": {
+    "com.yasirkula.simplefilebrowser": "1.6.6"
+  },
+  "author": {
+    "name": "Enikeishik",
+    "email": "enikeishik@gmail.com",
+    "url": "https://github.com/enikeishik"
+  }
 }
