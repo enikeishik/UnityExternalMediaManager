@@ -69,8 +69,8 @@ namespace UnityExternalMediaManager
                 false,
                 null,
                 null,
-                "Файл видео",
-                "Выбрать"
+                "Р¤Р°Р№Р» РІРёРґРµРѕ",
+                "Р’С‹Р±СЂР°С‚СЊ"
             );
 
             if (FileBrowser.Success)
@@ -130,8 +130,8 @@ namespace UnityExternalMediaManager
                 false,
                 null,
                 null,
-                "Файл аудио",
-                "Выбрать"
+                "Р¤Р°Р№Р» Р°СѓРґРёРѕ",
+                "Р’С‹Р±СЂР°С‚СЊ"
             );
 
             if (FileBrowser.Success)
@@ -254,8 +254,8 @@ namespace UnityExternalMediaManager
                 false,
                 null,
                 null,
-                "Файл изображения",
-                "Выбрать"
+                "Р¤Р°Р№Р» РёР·РѕР±СЂР°Р¶РµРЅРёСЏ",
+                "Р’С‹Р±СЂР°С‚СЊ"
             );
 
             if (FileBrowser.Success)
