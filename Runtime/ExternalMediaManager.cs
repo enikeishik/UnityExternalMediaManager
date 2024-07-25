@@ -51,12 +51,13 @@ namespace UnityExternalMediaManager
             tmpCopies.Clear();
         }
 
-    #region SetVideo
+        #region SetVideo
         public void SetVideo(System.Action<string> action = null, VideoPlayer videoUI = null, Text debugUI = null)
         {
             FileBrowser.SetFilters(true, new FileBrowser.Filter("Videos (MP4, MPEG)", ".mp4", ".mpg", ".mpeg"));
             FileBrowser.SetDefaultFilter(".mp4");
 
+            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
             co.StartCoroutine(ShowLoadVideoDialogCoroutine(action, videoUI, debugUI));
@@ -97,9 +98,9 @@ namespace UnityExternalMediaManager
                 Debug.Log("Video path selecting error");
             }
         }
-    #endregion
+        #endregion
 
-    #region LoadVideo
+        #region LoadVideo
         public void LoadVideo(string videoPath, VideoPlayer videoUI, Text debugUI = null)
         {
             if (null != debugUI)
@@ -110,14 +111,15 @@ namespace UnityExternalMediaManager
             videoUI.source = VideoSource.Url;
             videoUI.url = GetTmpCopy(videoPath);
         }
-    #endregion
+        #endregion
 
-    #region SetAudio
+        #region SetAudio
         public void SetAudio(System.Action<string> action = null, AudioSource audioUI = null, Text debugUI = null)
         {
             FileBrowser.SetFilters(true, new FileBrowser.Filter("Audios (MP3, WAV)", ".mp3", ".wav"));
             FileBrowser.SetDefaultFilter(".mp3");
 
+            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
             co.StartCoroutine(ShowLoadAudioDialogCoroutine(action, audioUI, debugUI));
@@ -158,9 +160,9 @@ namespace UnityExternalMediaManager
                 Debug.Log("Audio path selecting error");
             }
         }
-    #endregion
+        #endregion
 
-    #region LoadAudio
+        #region LoadAudio
         public void LoadAudio(string audioPath, AudioSource audioUI, Text debugUI = null)
         {
             //load via bytes
@@ -168,6 +170,7 @@ namespace UnityExternalMediaManager
             //return;
 
             //load via UnityWebRequest
+            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
             co.StartCoroutine(LoadAudioClip(GetTmpCopy(audioPath), audioUI, debugUI));
@@ -234,20 +237,21 @@ namespace UnityExternalMediaManager
 
             return clip;
         }
-    #endregion
+        #endregion
 
-    #region SetImage
-        public void SetImage(System.Action<string> action = null, Image imageUI = null)
+        #region SetImage
+        public void SetImage(System.Action<string> action = null, Image imageUI = null, Text debugUI = null)
         {
             FileBrowser.SetFilters(true, new FileBrowser.Filter("Images (PNG, JPEG)", ".png", ".jpg"));
             FileBrowser.SetDefaultFilter(".png");
 
+            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
-            co.StartCoroutine(ShowLoadImageDialogCoroutine(action, imageUI));
+            co.StartCoroutine(ShowLoadImageDialogCoroutine(action, imageUI, debugUI));
         }
 
-        protected IEnumerator ShowLoadImageDialogCoroutine(System.Action<string> action = null, Image imageUI = null)
+        protected IEnumerator ShowLoadImageDialogCoroutine(System.Action<string> action = null, Image imageUI = null, Text debugUI = null)
         {
             yield return FileBrowser.WaitForLoadDialog(
                 FileBrowser.PickMode.Files,
@@ -273,7 +277,7 @@ namespace UnityExternalMediaManager
 
                     if (null != imageUI)
                     {
-                        LoadImage(imagePath, imageUI);
+                        LoadImage(imagePath, imageUI, debugUI);
                     }
                 }
             }
@@ -282,10 +286,10 @@ namespace UnityExternalMediaManager
                 Debug.Log("Image path selecting error");
             }
         }
-    #endregion
+        #endregion
 
-    #region LoadImage
-        public void LoadImage(string imagePath, Image imageUI)
+        #region LoadImage
+        public void LoadImage(string imagePath, Image imageUI, Text debugUI = null)
         {
             Vector2 imageSize = imageUI.rectTransform.sizeDelta;
             imageUI.sprite = LoadImage(imagePath, (int)imageSize.x, (int)imageSize.y);
@@ -322,6 +326,6 @@ namespace UnityExternalMediaManager
 
             return result;
         }
-    #endregion
+        #endregion
     }
 }
