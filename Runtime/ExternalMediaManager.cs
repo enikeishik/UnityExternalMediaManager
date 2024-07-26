@@ -61,6 +61,81 @@ namespace UnityExternalMediaManager
             }
         }
 
+        #region SetText
+        public void SetText(System.Action<string> action = null, Text textUI = null, Text debugUI = null)
+        {
+            FileBrowser.SetFilters(true, new FileBrowser.Filter("Texts (TXT, MD, JSON)", ".txt", ".md", ".json"));
+            FileBrowser.SetDefaultFilter(".txt");
+
+            var go = ExternalMediaManagerCorutines.GO;
+            if (null == go)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene", debugUI);
+                return;
+            }
+            var co = go.GetComponent<ExternalMediaManagerCorutines>();
+            if (null == co)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene as component", debugUI);
+                return;
+            }
+            co.StartCoroutine(ShowLoadTextDialogCoroutine(action, textUI, debugUI));
+        }
+
+        protected IEnumerator ShowLoadTextDialogCoroutine(System.Action<string> action = null, Text textUI = null, Text debugUI = null)
+        {
+            yield return FileBrowser.WaitForLoadDialog(
+                FileBrowser.PickMode.Files,
+                false,
+                null,
+                null,
+                "Файл с текстом",
+                "Выбрать"
+            );
+
+            if (FileBrowser.Success)
+            {
+                if (0 < FileBrowser.Result.Length)
+                {
+                    string textPath = FileBrowser.Result[0];
+
+                    Debug.Log("Text path selected " + textPath);
+
+                    if (null != action)
+                    {
+                        action(textPath);
+                    }
+
+                    if (null != textUI)
+                    {
+                        LoadText(textPath, textUI, debugUI);
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Text path selecting error");
+            }
+        }
+        #endregion
+
+        #region LoadText
+        public void LoadText(string textPath, Text textUI, Text debugUI = null)
+        {
+            if (null != debugUI)
+            {
+                debugUI.text += "\nExternalMediaManager::LoadText path: " + textPath;
+            }
+
+            textUI.text = FileBrowserHelpers.ReadTextFromFile(textPath);
+        }
+
+        public string GetText(string textPath)
+        {
+            return FileBrowserHelpers.ReadTextFromFile(textPath);
+        }
+        #endregion
+
         #region SetVideo
         public void SetVideo(System.Action<string> action = null, VideoPlayer videoUI = null, Text debugUI = null)
         {
@@ -279,7 +354,7 @@ namespace UnityExternalMediaManager
         #region SetImage
         public void SetImage(System.Action<string> action = null, Image imageUI = null, Text debugUI = null)
         {
-            FileBrowser.SetFilters(true, new FileBrowser.Filter("Images (PNG, JPEG)", ".png", ".jpg"));
+            FileBrowser.SetFilters(true, new FileBrowser.Filter("Images (PNG, JPEG)", ".png", ".jpg", ".jpeg"));
             FileBrowser.SetDefaultFilter(".png");
 
             var go = ExternalMediaManagerCorutines.GO;
