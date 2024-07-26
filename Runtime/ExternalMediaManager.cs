@@ -53,7 +53,7 @@ namespace UnityExternalMediaManager
 
         protected void DisplayError(string error, Text debugUI = null)
         {
-            Debug.Log("ExternalMediaManager error: " + error);
+            Debug.LogError("ExternalMediaManager error: " + error);
 
             if (null != debugUI)
             {
