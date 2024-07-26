@@ -51,15 +51,34 @@ namespace UnityExternalMediaManager
             tmpCopies.Clear();
         }
 
+        protected void DisplayError(string error, Text debugUI = null)
+        {
+            Debug.Log("ExternalMediaManager error: " + error);
+
+            if (null != debugUI)
+            {
+                debugUI.text += "\nExternalMediaManager error: " + error;
+            }
+        }
+
         #region SetVideo
         public void SetVideo(System.Action<string> action = null, VideoPlayer videoUI = null, Text debugUI = null)
         {
             FileBrowser.SetFilters(true, new FileBrowser.Filter("Videos (MP4, MPEG)", ".mp4", ".mpg", ".mpeg"));
             FileBrowser.SetDefaultFilter(".mp4");
 
-            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
+            if (null == go)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene", debugUI);
+                return;
+            }
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
+            if (null == co)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene as component", debugUI);
+                return;
+            }
             co.StartCoroutine(ShowLoadVideoDialogCoroutine(action, videoUI, debugUI));
         }
 
@@ -119,9 +138,18 @@ namespace UnityExternalMediaManager
             FileBrowser.SetFilters(true, new FileBrowser.Filter("Audios (MP3, WAV)", ".mp3", ".wav"));
             FileBrowser.SetDefaultFilter(".mp3");
 
-            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
+            if (null == go)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene", debugUI);
+                return;
+            }
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
+            if (null == co)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene as component", debugUI);
+                return;
+            }
             co.StartCoroutine(ShowLoadAudioDialogCoroutine(action, audioUI, debugUI));
         }
 
@@ -170,9 +198,18 @@ namespace UnityExternalMediaManager
             //return;
 
             //load via UnityWebRequest
-            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
+            if (null == go)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene", debugUI);
+                return;
+            }
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
+            if (null == co)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene as component", debugUI);
+                return;
+            }
             co.StartCoroutine(LoadAudioClip(GetTmpCopy(audioPath), audioUI, debugUI));
         }
 
@@ -245,9 +282,18 @@ namespace UnityExternalMediaManager
             FileBrowser.SetFilters(true, new FileBrowser.Filter("Images (PNG, JPEG)", ".png", ".jpg"));
             FileBrowser.SetDefaultFilter(".png");
 
-            //todo: check and display debug(UI) info to use ExternalMediaManagerCorutines in scene
             var go = ExternalMediaManagerCorutines.GO;
+            if (null == go)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene", debugUI);
+                return;
+            }
             var co = go.GetComponent<ExternalMediaManagerCorutines>();
+            if (null == co)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene as component", debugUI);
+                return;
+            }
             co.StartCoroutine(ShowLoadImageDialogCoroutine(action, imageUI, debugUI));
         }
 
