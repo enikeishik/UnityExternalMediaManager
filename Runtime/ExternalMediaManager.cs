@@ -416,7 +416,7 @@ namespace UnityExternalMediaManager
             imageUI.sprite = LoadImage(imagePath, (int)imageSize.x, (int)imageSize.y);
         }
 
-        protected Sprite LoadImage(string imagePath, int width, int height)
+        public Sprite LoadImage(string imagePath, int width, int height)
         {
             if (!FileBrowserHelpers.FileExists(imagePath))
             {
