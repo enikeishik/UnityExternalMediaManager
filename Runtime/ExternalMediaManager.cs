@@ -295,8 +295,13 @@ namespace UnityExternalMediaManager
                 audioPath = "file://" + audioPath;
             }
 
+            string audioFilename = FileBrowserHelpers.GetFilename(audioPath);
+            int pos = audioFilename.LastIndexOf('.');
+            string audioFileext = pos > 0 ? audioFilename.Substring(pos + 1) : "";
+            bool isAudioWav = "wav" == audioFileext.ToLower();
+
             //GetAudioClip not loads content://...
-            using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(audioPath, AudioType.MPEG))
+            using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(audioPath, isAudioWav ? AudioType.WAV : AudioType.MPEG))
             {
                 yield return www.SendWebRequest();
 
