@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -10,11 +11,34 @@ namespace UnityExternalMediaManager
 {
     public class ExternalMediaManager
     {
+        protected StringBuilder debugLog;
+
         protected List<string> tmpCopies;
 
         public ExternalMediaManager()
         {
+            debugLog = new StringBuilder();
             tmpCopies = new List<string>();
+        }
+
+        public void AppendDebug(string text)
+        {
+            debugLog.Append("\n"
+                + System.DateTime.Now.ToLocalTime().ToString()
+                + "\t"
+                + text);
+
+            Debug.Log(text);
+        }
+
+        public string GetDebugLogData()
+        {
+            return debugLog.ToString();
+        }
+
+        public StringBuilder GetDebugLog()
+        {
+            return debugLog;
         }
 
         protected string GetTmpCopy(string sourcePath)
@@ -99,7 +123,7 @@ namespace UnityExternalMediaManager
                 {
                     string textPath = FileBrowser.Result[0];
 
-                    Debug.Log("Text path selected " + textPath);
+                    AppendDebug("Text path selected " + textPath);
 
                     if (null != action)
                     {
@@ -114,7 +138,7 @@ namespace UnityExternalMediaManager
             }
             else
             {
-                Debug.Log("Text path selecting error");
+                AppendDebug("Text path selecting error");
             }
         }
         #endregion
@@ -174,7 +198,7 @@ namespace UnityExternalMediaManager
                 {
                     string videoPath = FileBrowser.Result[0];
 
-                    Debug.Log("Video path selected " + videoPath);
+                    AppendDebug("Video path selected " + videoPath);
 
                     if (null != action)
                     {
@@ -189,7 +213,7 @@ namespace UnityExternalMediaManager
             }
             else
             {
-                Debug.Log("Video path selecting error");
+                AppendDebug("Video path selecting error");
             }
         }
         #endregion
@@ -245,7 +269,7 @@ namespace UnityExternalMediaManager
                 {
                     string audioPath = FileBrowser.Result[0];
 
-                    Debug.Log("Audio path selected " + audioPath);
+                    AppendDebug("Audio path selected " + audioPath);
 
                     if (null != action)
                     {
@@ -260,7 +284,7 @@ namespace UnityExternalMediaManager
             }
             else
             {
-                Debug.Log("Audio path selecting error");
+                AppendDebug("Audio path selecting error");
             }
         }
         #endregion
@@ -307,7 +331,7 @@ namespace UnityExternalMediaManager
 
                 if (www.result == UnityWebRequest.Result.ConnectionError)
                 {
-                    Debug.Log(www.error);
+                    AppendDebug("UnityWebRequest error: " + www.error + ", URL: " + www.url);
                     if (null != debugUI)
                     {
                         debugUI.text += "\nExternalMediaManager::LoadAudioClip error: " + www.error
@@ -394,7 +418,7 @@ namespace UnityExternalMediaManager
                 {
                     string imagePath = FileBrowser.Result[0];
 
-                    Debug.Log("Image path selected " + imagePath);
+                    AppendDebug("Image path selected " + imagePath);
 
                     if (null != action)
                     {
@@ -409,7 +433,7 @@ namespace UnityExternalMediaManager
             }
             else
             {
-                Debug.Log("Image path selecting error");
+                AppendDebug("Image path selecting error");
             }
         }
         #endregion
