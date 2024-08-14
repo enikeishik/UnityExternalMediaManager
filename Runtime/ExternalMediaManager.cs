@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -11,32 +10,33 @@ namespace UnityExternalMediaManager
 {
     public class ExternalMediaManager
     {
-        protected StringBuilder debugLog;
+        protected List<string> debugLog;
 
         protected List<string> tmpCopies;
 
         public ExternalMediaManager()
         {
-            debugLog = new StringBuilder();
+            debugLog = new List<string>();
             tmpCopies = new List<string>();
         }
 
         public void AppendDebug(string text)
         {
-            debugLog.Append("\n"
-                + System.DateTime.Now.ToLocalTime().ToString()
-                + "\t"
-                + text);
+            debugLog.Add(
+                System.DateTime.Now.ToLocalTime().ToString()
+                    + "\t"
+                    + text
+            );
 
             Debug.Log(text);
         }
 
-        public string GetDebugLogData()
+        public string GetDebugLogData(string delimiter = "")
         {
-            return debugLog.ToString();
+            return string.Join(delimiter, debugLog);
         }
 
-        public StringBuilder GetDebugLog()
+        public List<string> GetDebugLog()
         {
             return debugLog;
         }
