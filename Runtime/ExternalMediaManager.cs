@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -349,12 +350,13 @@ namespace UnityExternalMediaManager
         {
             AppendDebug("LoadAudioClip, audioPath: " + audioPath);
 
-            if (0 != audioPath.IndexOf("content://com.android.") && 0 != audioPath.IndexOf("file://"))
+            //audioPath passing in this method is TEMP file and no need to check and use SAF methods
+            if (0 != audioPath.IndexOf("file://"))
             {
                 audioPath = "file://" + audioPath;
             }
 
-            string audioFilename = FileBrowserHelpers.GetFilename(audioPath);
+            string audioFilename = Path.GetFilename(audioPath);
             AppendDebug("audioFilename: " + audioFilename);
 
             int pos = audioFilename.LastIndexOf('.');
