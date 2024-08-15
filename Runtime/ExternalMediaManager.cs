@@ -22,9 +22,14 @@ namespace UnityExternalMediaManager
             tmpCopies = new List<string>();
         }
 
-        public void PassExtDebugLog(ref List<string> debugLog)
+        public void SetExtDebugLog(ref List<string> debugLog)
         {
             extDebugLog = debugLog;
+        }
+
+        public void UnsetExtDebugLog()
+        {
+            extDebugLog = null;
         }
 
         public void AppendDebug(string text)
