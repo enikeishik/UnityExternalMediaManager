@@ -340,11 +340,29 @@ namespace UnityExternalMediaManager
                 }
                 else
                 {
-                    audioUI.clip = DownloadHandlerAudioClip.GetContent(www);
-
+                    AppendDebug("UnityWebRequest::LoadAudioClip try GetContent from URL: " + www.url);
                     if (null != debugUI)
                     {
-                        debugUI.text += "\nExternalMediaManager::LoadAudioClip URL: " + www.url;
+                        debugUI.text += "\nExternalMediaManager::LoadAudioClip try GetContent from URL: " + www.url;
+                    }
+
+                    audioUI.clip = DownloadHandlerAudioClip.GetContent(www);
+
+                    if (null == audioUI.clip)
+                    {
+                        AppendDebug("GetContent failed, clip is null");
+                        if (null != debugUI)
+                        {
+                            debugUI.text += "\nGetContent failed, clip is null";
+                        }
+                    }
+                    else
+                    {
+                        AppendDebug("GetContent success, clip.length: " + audioUI.clip.length);
+                        if (null != debugUI)
+                        {
+                            debugUI.text += "\nGetContent success, clip.length: " + audioUI.clip.length;
+                        }
                     }
                 }
             }
