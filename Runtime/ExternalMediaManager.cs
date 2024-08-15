@@ -12,12 +12,19 @@ namespace UnityExternalMediaManager
     {
         protected List<string> debugLog;
 
+        protected List<string> extDebugLog;
+
         protected List<string> tmpCopies;
 
         public ExternalMediaManager()
         {
             debugLog = new List<string>();
             tmpCopies = new List<string>();
+        }
+
+        public void PassExtDebugLog(ref List<string> debugLog)
+        {
+            extDebugLog = debugLog;
         }
 
         public void AppendDebug(string text)
@@ -27,6 +34,15 @@ namespace UnityExternalMediaManager
                     + "\t"
                     + text
             );
+
+            if (null != extDebugLog)
+            {
+                extDebugLog.Add(
+                    System.DateTime.Now.ToLocalTime().ToString()
+                        + "\t"
+                        + text
+                );
+            }
 
             Debug.Log(text);
         }
