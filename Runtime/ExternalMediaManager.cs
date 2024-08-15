@@ -359,50 +359,52 @@ namespace UnityExternalMediaManager
             string audioFileext = pos > 0 ? audioFilename.Substring(pos + 1) : "";
             bool isAudioWav = "wav" == audioFileext.ToLower();
 
-            //GetAudioClip not loads content://...
-            using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(audioPath, isAudioWav ? AudioType.WAV : AudioType.MPEG))
+            AppendDebug("UnityWebRequestMultimedia.GetAudioClip for audioPath and AudioType: " + (isAudioWav ? "WAV" : "MPEG"));
+
+            UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(audioPath, isAudioWav ? AudioType.WAV : AudioType.MPEG);
+
+            AppendDebug("UnityWebRequest.SendWebRequest");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
             {
-                AppendDebug("UnityWebRequest.SendWebRequest");
-
-                yield return www.SendWebRequest();
-
-                if (www.result == UnityWebRequest.Result.ConnectionError)
+                AppendDebug("UnityWebRequest error: " + www.error + ", URL: " + www.url);
+                if (null != debugUI)
                 {
-                    AppendDebug("UnityWebRequest error: " + www.error + ", URL: " + www.url);
+                    debugUI.text += "\nExternalMediaManager::LoadAudioClip error: " + www.error
+                                    + "\nURL: " + www.url;
+                }
+            }
+            else
+            {
+                AppendDebug("UnityWebRequest::LoadAudioClip try GetContent from URL: " + www.url);
+                if (null != debugUI)
+                {
+                    debugUI.text += "\nExternalMediaManager::LoadAudioClip try GetContent from URL: " + www.url;
+                }
+
+                audioUI.clip = DownloadHandlerAudioClip.GetContent(www);
+
+                if (null == audioUI.clip)
+                {
+                    AppendDebug("GetContent failed, clip is null");
                     if (null != debugUI)
                     {
-                        debugUI.text += "\nExternalMediaManager::LoadAudioClip error: " + www.error
-                                        + "\nURL: " + www.url;
+                        debugUI.text += "\nGetContent failed, clip is null";
                     }
                 }
                 else
                 {
-                    AppendDebug("UnityWebRequest::LoadAudioClip try GetContent from URL: " + www.url);
+                    AppendDebug("GetContent success, clip.length: " + audioUI.clip.length);
                     if (null != debugUI)
                     {
-                        debugUI.text += "\nExternalMediaManager::LoadAudioClip try GetContent from URL: " + www.url;
-                    }
-
-                    audioUI.clip = DownloadHandlerAudioClip.GetContent(www);
-
-                    if (null == audioUI.clip)
-                    {
-                        AppendDebug("GetContent failed, clip is null");
-                        if (null != debugUI)
-                        {
-                            debugUI.text += "\nGetContent failed, clip is null";
-                        }
-                    }
-                    else
-                    {
-                        AppendDebug("GetContent success, clip.length: " + audioUI.clip.length);
-                        if (null != debugUI)
-                        {
-                            debugUI.text += "\nGetContent success, clip.length: " + audioUI.clip.length;
-                        }
+                        debugUI.text += "\nGetContent success, clip.length: " + audioUI.clip.length;
                     }
                 }
             }
+
+            www.Dispose();
         }
 
         protected AudioClip LoadAudio(string audioPath)
