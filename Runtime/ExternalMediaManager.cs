@@ -356,7 +356,7 @@ namespace UnityExternalMediaManager
                 audioPath = "file://" + audioPath;
             }
 
-            string audioFilename = Path.GetFilename(audioPath);
+            string audioFilename = Path.GetFileName(audioPath);
             AppendDebug("audioFilename: " + audioFilename);
 
             int pos = audioFilename.LastIndexOf('.');
