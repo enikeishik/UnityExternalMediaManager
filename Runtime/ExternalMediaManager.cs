@@ -41,6 +41,11 @@ namespace UnityExternalMediaManager
             return debugLog;
         }
 
+        public void ClearDebugLog()
+        {
+            debugLog.Clear();
+        }
+
         protected string GetTmpCopy(string sourcePath)
         {
             if (0 != sourcePath.IndexOf("content://com.android."))
