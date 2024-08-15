@@ -355,6 +355,8 @@ namespace UnityExternalMediaManager
             }
 
             string audioFilename = FileBrowserHelpers.GetFilename(audioPath);
+            AppendDebug("audioFilename: " + audioFilename);
+
             int pos = audioFilename.LastIndexOf('.');
             string audioFileext = pos > 0 ? audioFilename.Substring(pos + 1) : "";
             bool isAudioWav = "wav" == audioFileext.ToLower();
