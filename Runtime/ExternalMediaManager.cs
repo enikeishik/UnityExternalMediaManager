@@ -48,8 +48,11 @@ namespace UnityExternalMediaManager
 
         protected string GetTmpCopy(string sourcePath)
         {
+            AppendDebug("GetTmpCopy, sourcePath: " + sourcePath);
+
             if (0 != sourcePath.IndexOf("content://com.android."))
             {
+                AppendDebug("Android without SAF, returning initial sourcePath");
                 return sourcePath;
             }
 
@@ -61,6 +64,8 @@ namespace UnityExternalMediaManager
             FileBrowserHelpers.CopyFile(sourcePath, tmpPath);
 
             tmpCopies.Add(tmpPath);
+
+            AppendDebug("Android with SAF, returning tmpPath: " + tmpPath);
 
             return tmpPath;
         }
@@ -297,6 +302,8 @@ namespace UnityExternalMediaManager
         #region LoadAudio
         public void LoadAudio(string audioPath, AudioSource audioUI, Text debugUI = null)
         {
+            AppendDebug("LoadAudio");
+
             //load via bytes
             //audioUI.clip = LoadAudio(audioPath);
             //return;
@@ -319,6 +326,8 @@ namespace UnityExternalMediaManager
 
         protected IEnumerator LoadAudioClip(string audioPath, AudioSource audioUI, Text debugUI = null)
         {
+            AppendDebug("LoadAudioClip, audioPath: " + audioPath);
+
             if (0 != audioPath.IndexOf("content://com.android.") && 0 != audioPath.IndexOf("file://"))
             {
                 audioPath = "file://" + audioPath;
