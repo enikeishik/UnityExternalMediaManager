@@ -362,6 +362,8 @@ namespace UnityExternalMediaManager
             //GetAudioClip not loads content://...
             using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(audioPath, isAudioWav ? AudioType.WAV : AudioType.MPEG))
             {
+                AppendDebug("UnityWebRequest.SendWebRequest");
+
                 yield return www.SendWebRequest();
 
                 if (www.result == UnityWebRequest.Result.ConnectionError)
