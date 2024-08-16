@@ -78,23 +78,33 @@ namespace UnityExternalMediaManager
                 return sourcePath;
             }
 
+            AppendDebug("Android with SAF");
+
             var tmpDir = Application.persistentDataPath;
             string fileName = FileBrowserHelpers.GetFilename(sourcePath);
             string tmpPath = tmpDir + "/" + fileName;
+
+            if (File.Exists(tmpPath))
+            {
+                AppendDebug("Returning saved before temp copy tmpPath: " + tmpPath);
+                return tmpPath;
+            }
+
+            AppendDebug("Copying file into tmpPath: " + tmpPath);
 
             //todo: try-catch?
             FileBrowserHelpers.CopyFile(sourcePath, tmpPath);
 
             tmpCopies.Add(tmpPath);
 
-            AppendDebug("Android with SAF, returning tmpPath: " + tmpPath);
+            AppendDebug("Returning tmpPath: " + tmpPath);
 
             return tmpPath;
         }
 
         protected void DeleteTmpCopy(string tmpPath)
         {
-            FileBrowserHelpers.DeleteFile(tmpPath);
+            File.Delete(tmpPath);
         }
 
         public void Cleanup()
