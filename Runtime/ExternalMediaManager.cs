@@ -17,10 +17,13 @@ namespace UnityExternalMediaManager
 
         protected List<string> tmpCopies;
 
-        public ExternalMediaManager()
+        protected string tmpDir;
+
+        public ExternalMediaManager(bool tmpInPersistent = false)
         {
             debugLog = new List<string>();
             tmpCopies = new List<string>();
+            tmpDir = tmpInPersistent ? Application.persistentDataPath : Application.temporaryCachePath;
         }
 
         public void SetExtDebugLog(ref List<string> debugLog)
@@ -80,7 +83,6 @@ namespace UnityExternalMediaManager
 
             AppendDebug("Android with SAF");
 
-            var tmpDir = Application.persistentDataPath;
             string fileName = FileBrowserHelpers.GetFilename(sourcePath);
             string tmpPath = tmpDir + "/" + fileName;
 
