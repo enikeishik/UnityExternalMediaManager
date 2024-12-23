@@ -19,11 +19,19 @@ namespace UnityExternalMediaManager
 
         protected string tmpDir;
 
+        protected Dictionary<string, Texture2D> textures;
+        protected Dictionary<string, RenderTexture> renderTextures;
+
         public ExternalMediaManager(bool tmpInPersistent = false)
         {
             debugLog = new List<string>();
             tmpCopies = new List<string>();
+
+            //may error occurs if create ExternalMediaManager instance in some class constructor due to Application object not accessible
             tmpDir = tmpInPersistent ? Application.persistentDataPath : Application.temporaryCachePath;
+
+            textures = new Dictionary<string, Texture2D>();
+            renderTextures = new Dictionary<string, RenderTexture>();
         }
 
         public void SetExtDebugLog(ref List<string> debugLog)
@@ -527,7 +535,17 @@ namespace UnityExternalMediaManager
 
             byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(imagePath);
 
-            Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false);
+            string whKey = "wh:" + width + "," + height;
+            Texture2D texture;
+            if (textures.ContainsKey(whKey))
+            {
+                texture = textures[whKey];
+            }
+            else
+            {
+                texture = new Texture2D(width, height, TextureFormat.RGB24, false);
+                textures.Add(whKey, texture);
+            }
 
             texture.LoadImage(bytes);
 
@@ -538,7 +556,18 @@ namespace UnityExternalMediaManager
 
         protected Texture2D ResizeTexture2D(Texture2D texture, int width, int height)
         {
-            RenderTexture rt = new RenderTexture(width, height, 24);
+            string whKey = "wh:" + width + "," + height;
+            RenderTexture rt;
+            if (renderTextures.ContainsKey(whKey))
+            {
+                rt = renderTextures[whKey];
+            }
+            else
+            {
+                rt = new RenderTexture(width, height, 24);
+                renderTextures.Add(whKey, rt);
+            }
+
             RenderTexture.active = rt;
 
             Graphics.Blit(texture, rt);
