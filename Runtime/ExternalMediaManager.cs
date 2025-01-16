@@ -578,6 +578,72 @@ namespace UnityExternalMediaManager
 
             return result;
         }
+        
+        public void LoadNativeImage(string imagePath, Image imageUI, Text debugUI = null)
+        {
+            AppendDebug("LoadNativeImage");
+
+            var go = ExternalMediaManagerCorutines.GO;
+            if (null == go)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene", debugUI);
+                return;
+            }
+            var co = go.GetComponent<ExternalMediaManagerCorutines>();
+            if (null == co)
+            {
+                DisplayError("Script ExternalMediaManagerCorutines not mounted to scene as component", debugUI);
+                return;
+            }
+            co.StartCoroutine(LoadNativeImageCoroutine(GetTmpCopy(imagePath), imageUI, debugUI));
+        }
+
+        protected IEnumerator LoadNativeImageCoroutine(string imagePath, Image imageUI, Text debugUI = null)
+        {
+            AppendDebug("LoadNativeImage, imagePath: " + imagePath);
+
+            if (0 != imagePath.IndexOf("file://"))
+            {
+                imagePath = "file://" + imagePath;
+            }
+
+            string imageFilename = Path.GetFileName(imagePath);
+            AppendDebug("imageFilename: " + imageFilename);
+
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(imagePath);
+
+            AppendDebug("UnityWebRequest.SendWebRequest");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                AppendDebug("UnityWebRequest error: " + www.error + ", URL: " + www.url);
+                if (null != debugUI)
+                {
+                    debugUI.text += "\nExternalMediaManager::LoadNativeImage error: " + www.error
+                                    + "\nURL: " + www.url;
+                }
+            }
+            else
+            {
+                AppendDebug("UnityWebRequest::LoadNativeImage try GetContent from URL: " + www.url);
+                if (null != debugUI)
+                {
+                    debugUI.text += "\nExternalMediaManager::LoadNativeImage try GetContent from URL: " + www.url;
+                }
+
+                Texture2D texture = DownloadHandlerTexture.GetContent(www);
+
+                Vector2 imageSize = imageUI.rectTransform.sizeDelta;
+
+                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+
+                imageUI.sprite = sprite;
+            }
+
+            www.Dispose();
+        }
         #endregion
     }
 }
